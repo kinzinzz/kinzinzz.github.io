@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로젝트</title>
     <style>
+        .menu{
+            display: flex;            
+        } 
         .ball{
             width: 10rem;
             height: 10rem;
@@ -20,46 +23,77 @@
             font-weight: bold;
             
         }
+        .balls-list{
+            display: flex;
+            flex-direction: column;
+        }
         .ball-container{
             display: flex;
         }
-        
     </style>
 </head>
 <body>
     <h1>로또 추첨 번호</h1>
-    <button id="lotto-btn">행운 번호 받기</button>
-    <div id="result" class="ball-container"></div>
+    <!-- 번호 입력 + 버튼 -->
+    <div class="menu">
+        <input id="input-box" type="text" placeholder ="원하는 로또 번호 개수 입력" onfocus="this.placeholder=''">
+        <button id="lotto-btn" type="submit">확인</button>
+    </div>
+    <!-- 로또번호 출력 -->
+    <div id="result" class="balls-list"></div>
+        
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script>
         
+
         const button = document.querySelector('#lotto-btn')
         button.addEventListener('click', function() {
-            
-            //요소 만들기
-            const ballContainer = document.createElement('div')
-            ballContainer.classList.add('ball-container')
-            //공을 만들어서 => 6개 만들어서 
-            const numbers = _.sortBy(_.sampleSize(_.range(1,46), 6))
-            
-            for(i = 0; i < numbers.length; ++i){
-                const ball = document.createElement('div')
-                ball.classList.add('ball')
-                ball.innerText = numbers[i]
-                
-                if((numbers[i] >= 1) && (numbers[i] <= 10)){ball.style.backgroundColor = 'yellow'}
-                else if((numbers[i] >= 11) && (numbers[i] <= 20)){ball.style.backgroundColor = 'blue'}
-                else if((numbers[i] >= 21) && (numbers[i] <= 30)){ball.style.backgroundColor = 'red'}
-                else if((numbers[i] >= 31) && (numbers[i] <= 40)){ball.style.backgroundColor = 'gray'}
-                else if((numbers[i] >= 41) && (numbers[i] <= 46)){ball.style.backgroundColor = 'green'}
-                ballContainer.appendChild(ball)
-            }                            
-            //컨테이너에 붙인다.
-            
-            // 컨테이너를 결과 영역에 붙인다.
+            // '확인' 클릭시 처음에는 초기화
             const result = document.querySelector('#result')
-            result.appendChild(ballContainer)
-        })
+            removeAllchild(result);
+            
+            // 입력받은 숫자 가져오기
+            var inputNumber = document.querySelector('#input-box').value
+            inputNumber = parseInt(inputNumber)
+
+            // 입력받은 숫자 만큼 반복
+            for(i = 1; i <= inputNumber; ++i){
+            
+                // 요소 만들기
+                const ballContainer = document.createElement('div')
+                ballContainer.classList.add('ball-container')
+                
+                // 공을 만들어서 => 6개 만들어서 
+                const numbers = _.sortBy(_.sampleSize(_.range(1,46), 6))
+                
+                for(j = 0; j < numbers.length; ++j){
+                    const ball = document.createElement('div')
+                    ball.classList.add('ball')
+                    ball.innerText = numbers[j]
+                    
+                    if((numbers[j] >= 1) && (numbers[j] <= 10)){ball.style.backgroundColor = 'yellow'}
+                    else if((numbers[j] >= 11) && (numbers[j] <= 20)){ball.style.backgroundColor = 'blue'}
+                    else if((numbers[j] >= 21) && (numbers[j] <= 30)){ball.style.backgroundColor = 'red'}
+                    else if((numbers[j] >= 31) && (numbers[j] <= 40)){ball.style.backgroundColor = 'gray'}
+                    else if((numbers[j] >= 41) && (numbers[j] <= 46)){ball.style.backgroundColor = 'green'}
+                    
+                    //컨테이너에 붙인다.
+                    ballContainer.appendChild(ball)
+                }                            
+                
+                
+                // 컨테이너를 결과 영역에 붙인다.
+                const result = document.querySelector('#result')
+                result.appendChild(ballContainer)
+                       
+        }})
+
+        // 자식요소들 삭제하는 함수
+        function removeAllchild(div) {
+        while (div.hasChildNodes()) {
+            div.removeChild(div.firstChild);
+        }
+}
     </script>
 </body>
 </html>
